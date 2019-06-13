@@ -4,10 +4,9 @@ services:
   - docker
 
 before_install:
-  - gem install bundler
   - docker build -t itkachuk/react-tests -f ./client/Dockerfile.dev ./client
 
-scripts:
+script:
   - docker run itkachuk/react-tests npm test -- --coverage
 
 after_success:
