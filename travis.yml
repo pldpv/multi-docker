@@ -1,0 +1,21 @@
+sudo: required
+
+services:
+  - docker
+
+before_install:
+  - docker build -t itkachuk/react-tests -f ./client/Dockerfile.dev ./client
+
+scripts:
+  - docker run itkachuk/react-tests npm test -- --coverage
+
+after_success:
+  - docker build -t itkachuk/multi-client -f ./client
+  - docker build -t itkachuk/multi-nginx -f ./nginx
+  - docker build -t itkachuk/multi-server -f ./server
+  - docker build -t itkachuk/multi-worker -f ./worker
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
+  - docker push itkachuk/multi-client
+  - docker push itkachuk/multi-nginx
+  - docker push itkachuk/multi-server
+  - docker push itkachuk/multi-worker
