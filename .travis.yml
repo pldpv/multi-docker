@@ -19,3 +19,16 @@ after_success:
   - docker push itkachuk/multi-nginx
   - docker push itkachuk/multi-server
   - docker push itkachuk/multi-worker
+
+deploy:
+  provider: elasticbeanstalk
+  region: us-east-2
+  app: multi-docker
+  env: MultiDocker-env
+  bucket_name: elasticbeanstalk-us-east-2-044591524177
+  bucker_path: multi-docker
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key:
+    secure: $AWS_SECRET_KEY
